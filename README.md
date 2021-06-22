@@ -58,30 +58,47 @@ it's more effective to use img.item() and img.itemset() from numpy library for t
 	~ img.shape: the shape of an image is accessed by img.shape. it returns a tuple of the number of rows, columns, and channels (if the image is color):
 	~ img.size for accessing total number of pixels
 	~ img.dtype for accessing image data type
+	
 	!img.dtype is very important while debugging because a large number of errors in OpenCV-Python code are caused by invalid datatype.
 	
 3. Image Region Of Interest
 	ROI it is a field of picture, that presents an interest for programmer or user.
 	f/e if you need to work with eyes on the picture, you have to explore only face region, because eyes always mostly on the face.
 	~ img[280:340, 330:390] for defining ROI 
+	
 	![image](https://user-images.githubusercontent.com/43139654/122920891-89fd3900-d36a-11eb-8ebd-3315dbaa4fbc.png)
 4. Splitting and Merging Image Channels
 	~ cv.copyMakeBorder()
+	
 	if you want to create a border around an image, something like a photo frame, you can use cv.copyMakeBorder(). But it has more applications for convolution operation, zero padding etc. This function takes following arguments:
+	
 	src - input image
 	top, bottom, left, right - border width in number of pixels in corresponding directions
 	borderType - Flag defining what kind of border to be added. It can be following types:
+	
 	cv.BORDER_CONSTANT - Adds a constant colored border. The value should be given as next argument.
+	
 	cv.BORDER_REFLECT - Border will be mirror reflection of the border elements, like this : fedcba|abcdefgh|hgfedcb
+	
 	cv.BORDER_REFLECT_101 or cv.BORDER_DEFAULT - Same as above, but with a slight change, like this : gfedcb|abcdefgh|gfedcba
+	
 	cv.BORDER_REPLICATE - Last element is replicated throughout, like this: aaaaaa|abcdefgh|hhhhhhh
+	
 	cv.BORDER_WRAP - Can't explain, it will look like this : cdefgh|abcdefgh|abcdefg
+	
 	value - Color of border if border type is cv.BORDER_CONSTANT
+	
 	![image](https://user-images.githubusercontent.com/43139654/122922053-e7de5080-d36b-11eb-8e5b-ed931e475973.png)
 5. Image blending
+	
 	~ cv.add() for addition
+	
 	!OpenCV addition is a saturated operation while Numpy addition is a modulo operation.
-	~ cv. addWeighted() for blending images with different weights ![image](https://user-images.githubusercontent.com/43139654/122923917-dbf38e00-d36d-11eb-922d-7aade0b29f62.png)
+	
+	~ cv. addWeighted() for blending images with different weights 
+	
+	![image](https://user-images.githubusercontent.com/43139654/122923917-dbf38e00-d36d-11eb-922d-7aade0b29f62.png)
+	
 	f/e dst = cv.addWeighted(img1,0.7,img2,0.3,0)
 6. Bitwise Operations
 
