@@ -30,9 +30,9 @@ img.itemset((100,100,1), 50)
 print(img.item(100,100,1))
 
 #accessing image properties
-print(img.shape)
-print(img.size)
-print(img.dtype)
+print('shape ' , img.shape)
+print('size ' , img.size)
+print('data type ', img.dtype)
 
 eye = img[600:670, 580:680]
 img[500:570,690:790] = eye
@@ -64,3 +64,57 @@ plt.show()
 
 #try out several arithmetic operations on images, like addition, subtraction, bitwise operations, and etc.
 #functions: cv.add(), cv.addWeighted(), etc.
+
+x = np.uint8([250])
+y = np.uint8([10])
+print( cv.add(x,y) ) # 250+10 = 260 => 255
+print(x+y)
+
+img1 = cv.imread(PATH + '5.jfif')
+if os.path.isfile(PATH + '5.jfif') == False:
+    print('file 3 not found')
+
+
+img2 = cv.imread(PATH + 'lena.png')
+if os.path.isfile(PATH + 'lena.png') == False:
+    print('file 4 not found')
+
+img2 = cv.resize(img2, (img1.shape[1], img1.shape[0]), cv.INTER_LINEAR)
+
+print(img1.shape, img2.shape)
+dst = cv.addWeighted(img1,0.5,img2,0.5,0)
+cv.imshow('blending',dst)
+cv.waitKey(0)
+cv.destroyAllWindows()
+
+#img2 = cv.rotate(img2, cv.ROTATE_90_CLOCKWISE)
+#Bitwise operations
+img1 = cv.imread(PATH + '5.jfif')
+img2 = cv.imread(PATH + 'logo.png')
+img1 = cv.resize(img1, (512,512), cv.INTER_CUBIC)
+img2 = cv.resize(img2,(100,100), cv.INTER_LINEAR)
+rows,cols,channels = img2.shape
+roi = img1[0:rows, 0:cols]
+# Now create a mask of logo and create its inverse mask also
+img2gray = cv.cvtColor(img2,cv.COLOR_BGR2GRAY)
+ret, mask = cv.threshold(img2gray, 10, 255, cv.THRESH_BINARY)
+mask_inv = cv.bitwise_not(mask)
+# Now black-out the area of logo in ROI
+img1_bg = cv.bitwise_and(roi,roi,mask = mask_inv)
+# Take only region of logo from logo image.
+img2_fg = cv.bitwise_and(img2,img2,mask = mask)
+# Put logo in ROI and modify the main image
+dst = cv.add(img1_bg,img2_fg)
+img1[0:rows, 0:cols ] = dst
+cv.imshow('res',img1)
+cv.waitKey(0)
+cv.destroyAllWindows()
+
+#Performance Measurement and Improvement Technique
+e1 = cv.getTickCount()
+for i in range(5,49,2):
+    img1 = cv.medianBlur(img1,i)
+e2 = cv.getTickCount()
+t = (e2 - e1)/cv.getTickFrequency()
+cv.imshow('blur',img1)
+print( t )
