@@ -101,5 +101,19 @@ it's more effective to use img.item() and img.itemset() from numpy library for t
 	
 	f/e dst = cv.addWeighted(img1,0.7,img2,0.3,0)
 6. Bitwise Operations
-
-
+	bitwise operations should be performed on the images with same shape
+	~ cv2.bitwise_and(source1, source2, destination, mask): bitwise AND
+	~ cv2.bitwise_or(source1, source2, destination, mask): bitwise OR
+	~ cv2.bitwise_xor(source1, source2, destination, mask): XOR
+	~ cv2.bitwise_not(source, destination, mask): NOT
+	![image](https://user-images.githubusercontent.com/43139654/123100990-45da6900-d43c-11eb-99b8-56eeb0523b26.png)
+7. Performance measurement
+	~ cv.getTickCount:  function returns the number of clock-cycles after a reference event (like the moment the machine was switched ON) to the moment this function is called
+	~ cv.getTickFrequency function returns the frequency of clock-cycles, or the number of clock-cycles per second
+	to find execution time:
+	time = (e2 - e1)/ cv.getTickFrequency()
+8. Performance Optimization Techniques
+	! Avoid using loops in Python as much as possible, especially double/triple loops etc. They are inherently slow.
+	! Vectorize the algorithm/code to the maximum extent possible, because Numpy and OpenCV are optimized for vector operations.
+	! Exploit the cache coherence.
+	! Never make copies of an array unless it is necessary. Try to use views instead. Array copying is a costly operation.
