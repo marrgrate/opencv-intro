@@ -102,9 +102,13 @@ it's more effective to use img.item() and img.itemset() from numpy library for t
 	f/e dst = cv.addWeighted(img1,0.7,img2,0.3,0)
 6. Bitwise Operations
 	bitwise operations should be performed on the images with same shape
+	
 	~ cv2.bitwise_and(source1, source2, destination, mask): bitwise AND
+	
 	~ cv2.bitwise_or(source1, source2, destination, mask): bitwise OR
+	
 	~ cv2.bitwise_xor(source1, source2, destination, mask): XOR
+	
 	~ cv2.bitwise_not(source, destination, mask): NOT
 	![image](https://user-images.githubusercontent.com/43139654/123100990-45da6900-d43c-11eb-99b8-56eeb0523b26.png)
 7. Performance measurement
@@ -113,7 +117,78 @@ it's more effective to use img.item() and img.itemset() from numpy library for t
 	to find execution time:
 	time = (e2 - e1)/ cv.getTickFrequency()
 8. Performance Optimization Techniques
+	
 	! Avoid using loops in Python as much as possible, especially double/triple loops etc. They are inherently slow.
+	
 	! Vectorize the algorithm/code to the maximum extent possible, because Numpy and OpenCV are optimized for vector operations.
+	
 	! Exploit the cache coherence.
+	
 	! Never make copies of an array unless it is necessary. Try to use views instead. Array copying is a costly operation.
+
+-- IMAGE PROCESSING -- 
+1. Colorspaces
+	In OpenCV there are about 150 color-space convertion methods. The most common used color-space convertions are BGR ↔ Gray and BGR ↔ HSV.
+	~ cv.cvtColor(src, dst, code): Converts an image from one color space to another.
+	
+	~ cv.inRange(src. lower, upper, dist): Checks if array elements lie between the elements of two other arrays.
+2. Transformations
+	for scaling an image cv.resize() is used
+	
+	for translation (or shifting) use cv.warpAffine() function
+	
+	for rotation use cv.getRotationMatrix2D()
+	
+	for affine transformation use cv.getAffineTransform() to create a 2x3 matrix which is to be passed to cv.warpAffine()
+	
+	![image](https://user-images.githubusercontent.com/43139654/123273510-61f90b80-d50b-11eb-8ac6-fbb173add4d9.png)
+	
+	for perspective transformation the transformation matrix can be found by the function cv.getPerspectiveTransform(). Then apply cv.warpPerspective with this 3x3 transformation matrix.
+	
+	![image](https://user-images.githubusercontent.com/43139654/123275323-e4ce9600-d50c-11eb-9628-44984f29c35d.png)
+	
+4. Thresholding
+	SIMPLE THR-G
+	When simple thresholding is used, pixel values lower then current threshold value is set to 0, otherway to 1.
+	
+	~ cv.threshold(src, thresh, maxval, type)
+	
+	OpenCV provides different types of thresholding which is given by the fourth parameter of the function. Basic thresholding as described above is done by using the type cv.THRESH_BINARY. All simple thresholding types are:
+	1) cv.THRESH_BINARY
+	2) cv.THRESH_BINARY_INV
+	3) cv.THRESH_TRUNC
+	4) cv.THRESH_TOZERO
+	5) cv.THRESH_TOZERO_INV
+	
+	![image](https://user-images.githubusercontent.com/43139654/123280444-717b5300-d511-11eb-92d1-b42401c61026.png)
+
+	![image](https://user-images.githubusercontent.com/43139654/123280165-3a0ca680-d511-11eb-9c3d-1a5baa3f1aed.png)
+	
+	![image](https://user-images.githubusercontent.com/43139654/123280318-5c062900-d511-11eb-87cc-aafb8901e4e4.png)
+
+	ADAPTIVE THR-G	
+	it used in case picture has different lighting conditions in different areas.
+	
+	~ cv.adaptiveThreshold(src, maxValue, adaptiveMethod, thresholdType, blockSize, C)
+	
+	+ maxValue	Non-zero value assigned to the pixels for which the condition is satisfied
+	+ adaptiveMethod	Adaptive thresholding algorithm to use, see AdaptiveThresholdTypes. The BORDER_REPLICATE | BORDER_ISOLATED is used to process boundaries.
+	+ thresholdType	Thresholding type that must be either THRESH_BINARY or THRESH_BINARY_INV, see ThresholdTypes.
+	+ blockSize	Size of a pixel neighborhood that is used to calculate a threshold value for the pixel: 3, 5, 7, and so on.
+	+ C	Constant subtracted from the mean or weighted mean
+
+	there are two types of adaptive thr-d:
+	+ cv.ADAPTIVE_THRESH_MEAN_C: The threshold value is the mean of the neighbourhood area minus the constant C.
+ 	+ cv.ADAPTIVE_THRESH_GAUSSIAN_C: The threshold value is a gaussian-weighted sum of the neighbourhood values minus the constant C.
+
+	![image](https://user-images.githubusercontent.com/43139654/123293083-595d0100-d51c-11eb-8cfe-5eeea228953e.png)
+	
+	OTSU'S BINARIZATION
+	method, that choses threshold value automaticaly based on image histogram.
+	in order to do so, the cv.threshold() function is used, where cv.THRESH_OTSU is passed as an extra flag. 
+	
+	![image](https://user-images.githubusercontent.com/43139654/123299240-fbcbb300-d521-11eb-95b4-48f8ce0546c5.png)
+
+5. Smoothing
+
+	
